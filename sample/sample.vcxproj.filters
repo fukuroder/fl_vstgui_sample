@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{e2573806-730d-4d7b-a82f-e2651a68bb56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fpsdk">
+      <UniqueIdentifier>{51ab2c77-ae99-43ed-947a-827fe8aa78bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\vstgui">
+      <UniqueIdentifier>{14b1f61b-e260-4afd-bb4b-937fd82c1ff2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sample.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sample_editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\fpsdk\source\c\fp_plugclass.cpp">
+      <Filter>Source Files\fpsdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vstgui\plugin-bindings\plugguieditor.cpp">
+      <Filter>Source Files\vstgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vstgui\vstgui_win32.cpp">
+      <Filter>Source Files\vstgui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sample.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sample_editor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
+  </ItemGroup>
+</Project>
