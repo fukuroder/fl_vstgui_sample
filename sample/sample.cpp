@@ -192,9 +192,9 @@ void _stdcall sample::Idle()
 //----------------
 void _stdcall sample::Eff_Render(PWAV32FS SourceBuffer, PWAV32FS DestBuffer, int Length)
 {
-   for (int ii = 0; ii < Length; ii++)
-   {
+	for (int ii = 0; ii < Length; ii++)
+	{
 		(*DestBuffer)[ii][0] = (*SourceBuffer)[ii][0] * _gain;
 		(*DestBuffer)[ii][1] = (*SourceBuffer)[ii][1] * _gain;
-   }
+	}
 }
