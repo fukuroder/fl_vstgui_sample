@@ -4,19 +4,20 @@
 //---------------------
 // Plug-in information
 //---------------------
-TFruityPlugInfo PlugInfo = {
-    CurrentSDKVersion,
-    "sample",
-    "sample",
-    FPF_Type_Effect,
-    1, // number of parameters
-    0  // infinite
+TFruityPlugInfo PlugInfo =
+{
+	CurrentSDKVersion,
+	"sample",
+	"sample",
+	FPF_Type_Effect,
+	1, // the amount of parameters
+	0  // infinite
 };
 
 //----------------
 // 
 //----------------
-void* hInstance;
+void* hInstance; // used by VSTGUI
 extern "C" BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpvReserved)
 {
 	hInstance = hInst;
@@ -28,7 +29,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpvReserv
 //----------------
 extern "C" TFruityPlug* _stdcall CreatePlugInstance(TFruityPlugHost *Host, int Tag)
 {
-    return new sample(Tag, Host);
+	return new sample(Tag, Host);
 };
 
 //----------------
@@ -36,7 +37,7 @@ extern "C" TFruityPlug* _stdcall CreatePlugInstance(TFruityPlugHost *Host, int T
 //----------------
 sample::sample(int tag, TFruityPlugHost *host)
 {
-    Info = &PlugInfo;
+	Info = &PlugInfo;
 	HostTag = tag;
 	EditorHandle = 0;
 
@@ -45,7 +46,7 @@ sample::sample(int tag, TFruityPlugHost *host)
 
 	// parameter initialze
 	_gain = 1.0;
-	_params[0] = 0xffff;
+	_params[0] = (1<<16);
 }
 
 //----------------
@@ -69,7 +70,7 @@ void _stdcall sample::SaveRestoreState(IStream *Stream, BOOL Save)
 	else
 	{
 		unsigned long length = 0;
-        Stream->Read(_params, sizeof(_params), &length);
+		Stream->Read(_params, sizeof(_params), &length);
 		for( int ii = 0; ii < NumParams; ii++ )
 		{
 			if( ii == 0 )
@@ -77,6 +78,7 @@ void _stdcall sample::SaveRestoreState(IStream *Stream, BOOL Save)
 				_gain = ((float)_params[ii]) / (1<<16);
 			}
 
+			// update GUI
 			_editor->setParameter(ii, (float)_params[ii]);
 		}
 	}
@@ -87,16 +89,16 @@ void _stdcall sample::SaveRestoreState(IStream *Stream, BOOL Save)
 //----------------
 int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 {
-    switch (ID) {
+	switch (ID) {
 	case FPD_ShowEditor:
-        if (Value == 0)
-        {
+		if (Value == 0)
+		{
 			// close
-        	_editor->close();
+			_editor->close();
 			EditorHandle = 0;
-        }
-        else
-        {
+		}
+		else
+		{
 			if( EditorHandle == 0 )
 			{
 				// open
@@ -108,10 +110,10 @@ int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 				// 
 				::SetParent( EditorHandle, (HWND)Value );
 			}
-        }
-        break;
+		}
+		break;
 	}
-    return 0;
+	return 0;
 }
 
 //----------------
@@ -132,6 +134,7 @@ void _stdcall sample::GetName(int Section, int Index, int Value, char *label)
 //----------------
 int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 {
+	int ret = 0;
 	if( Index < NumParams )
 	{
 		if( RECFlags & REC_UpdateValue )
@@ -144,10 +147,12 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 				_gain = ((float)Value) / (1<<16);
 				if( _gain < 1.0e-8)
 				{
+					// convert to dB
 					sprintf_s(hinttext, 256, "Gain: -oo dB", 20.0f * log10(_gain));
 				}
 				else
 				{
+					// convert to dB
 					sprintf_s(hinttext, 256, "Gain: %.3f dB", 20.0f * log10(_gain));
 				}
 			}
@@ -168,26 +173,28 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 		else if( RECFlags & REC_GetValue )
 		{
 			// get parameter
-			Value = _params[Index];
+			ret = _params[Index];
 		}
 	}
-	return Value;
+	return ret;
 }
 
 //----------------
-// 
+// idle
 //----------------
 void _stdcall sample::Idle()
 {
 	if(_editor) _editor->idle();
 }
 
-
+//----------------
+// effect
+//----------------
 void _stdcall sample::Eff_Render(PWAV32FS SourceBuffer, PWAV32FS DestBuffer, int Length)
 {
-   for (int i = 0; i < Length; i++)
+   for (int ii = 0; ii < Length; ii++)
    {
-        (*DestBuffer)[i][0] = (*SourceBuffer)[i][0] * _gain;
-        (*DestBuffer)[i][1] = (*SourceBuffer)[i][1] * _gain;
+		(*DestBuffer)[ii][0] = (*SourceBuffer)[ii][0] * _gain;
+		(*DestBuffer)[ii][1] = (*SourceBuffer)[ii][1] * _gain;
    }
 }
