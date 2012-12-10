@@ -8,7 +8,6 @@ class sample_editor : public PluginGUIEditor, public CControlListener
 {
 public:
 	sample_editor(TFruityPlug* effect);
-	virtual ~sample_editor();
 
 	// from PluginGUIEditor
 	virtual bool open(void* ptr);

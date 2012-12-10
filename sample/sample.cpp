@@ -15,7 +15,7 @@ TFruityPlugInfo PlugInfo =
 };
 
 //----------------
-// 
+// DLL entry
 //----------------
 void* hInstance; // used by VSTGUI
 extern "C" BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpvReserved)
@@ -40,7 +40,6 @@ sample::sample(int tag, TFruityPlugHost *host)
 	Info = &PlugInfo;
 	HostTag = tag;
 	EditorHandle = 0;
-
 	_host = host;
 	_editor = new sample_editor(this);
 
@@ -57,18 +56,20 @@ sample::~sample()
 	delete _editor;
 }
 
-//----------------
-// 
-//----------------
+//-------------------------
+// save or load parameter
+//-------------------------
 void _stdcall sample::SaveRestoreState(IStream *Stream, BOOL Save)
 {
 	if( Save )
 	{
+		// save paremeters
 		unsigned long length = 0;
 		Stream->Write(_params, sizeof(_params), &length);
 	}
 	else
 	{
+		// load paremeters
 		unsigned long length = 0;
 		Stream->Read(_params, sizeof(_params), &length);
 		for( int ii = 0; ii < NumParams; ii++ )
@@ -78,7 +79,7 @@ void _stdcall sample::SaveRestoreState(IStream *Stream, BOOL Save)
 				_gain = ((float)_params[ii]) / (1<<16);
 			}
 
-			// update GUI
+			// send message to editor
 			_editor->setParameter(ii, (float)_params[ii]);
 		}
 	}
@@ -93,7 +94,7 @@ int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 	case FPD_ShowEditor:
 		if (Value == 0)
 		{
-			// close
+			// close editor
 			_editor->close();
 			EditorHandle = 0;
 		}
@@ -101,13 +102,13 @@ int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 		{
 			if( EditorHandle == 0 )
 			{
-				// open
+				// open editor
 				_editor->open((HWND)Value);
 				EditorHandle = (HWND)_editor->getFrame()->getPlatformFrame()->getPlatformRepresentation();
 			}
 			else
 			{
-				// 
+				// change parent window ?
 				::SetParent( EditorHandle, (HWND)Value );
 			}
 		}
@@ -157,16 +158,17 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 				}
 			}
 
+			// display text to hint bar
 			_host->OnHint(Index, hinttext);
 
 			if( RECFlags & REC_UpdateControl )
 			{
-				// update GUI
+				// send message to editor
 				_editor->setParameter(Index, (float)Value);
 			}
 			else
 			{
-				// send to host
+				// send message to host
 				_host->OnParamChanged(this->HostTag, Index, Value);
 			}
 		}
@@ -192,9 +194,10 @@ void _stdcall sample::Idle()
 //----------------
 void _stdcall sample::Eff_Render(PWAV32FS SourceBuffer, PWAV32FS DestBuffer, int Length)
 {
+	float gain = _gain;
 	for (int ii = 0; ii < Length; ii++)
 	{
-		(*DestBuffer)[ii][0] = (*SourceBuffer)[ii][0] * _gain;
-		(*DestBuffer)[ii][1] = (*SourceBuffer)[ii][1] * _gain;
+		(*DestBuffer)[ii][0] = (*SourceBuffer)[ii][0] * gain;
+		(*DestBuffer)[ii][1] = (*SourceBuffer)[ii][1] * gain;
 	}
 }

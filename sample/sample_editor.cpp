@@ -11,14 +11,7 @@ sample_editor::sample_editor(TFruityPlug* effect):PluginGUIEditor(effect)
 	rect.right = 170;
 	rect.bottom = 50;
 
-	setKnobMode( kLinearMode );
-}
-
-//----------------
-// destructor
-//----------------
-sample_editor::~sample_editor()
-{
+	setKnobMode(kLinearMode);
 }
 
 //----------------
@@ -29,9 +22,9 @@ bool sample_editor::open(void* ptr)
 	PluginGUIEditor::open(ptr);
 
 	// background
-	CRect frameSize (rect.left, rect.top, rect.right, rect.bottom);
-	frame = new CFrame (frameSize, ptr, this);
-	CBitmap* background = new CBitmap ("background.png");
+	CRect frameSize(rect.left, rect.top, rect.right, rect.bottom);
+	frame = new CFrame(frameSize, ptr, this);
+	CBitmap* background = new CBitmap("background.png");
 	frame->setBackground(background);
 	background->forget();
 
@@ -39,24 +32,24 @@ bool sample_editor::open(void* ptr)
 	CRect r (0, 0, 30, 30);
 	r.offset(130, 10);
 	CKnob* knob = new CKnob(r, this, 0, nullptr, nullptr);
-	knob->setColorHandle( CColor(55,55,55,200) );
-	knob->setColorShadowHandle( kTransparentCColor );
-	knob->setRangeAngle( float(k2PI * 5 / 6) );
-	knob->setStartAngle( float(k2PI / 3) );
-	knob->setWheelInc( 0.01f );
-	knob->setHandleLineWidth( 2.5f );
-	knob->setInsetValue( 6.0f );
+	knob->setColorHandle(CColor(55,55,55,200));
+	knob->setColorShadowHandle(kTransparentCColor);
+	knob->setRangeAngle(float(k2PI * 5 / 6));
+	knob->setStartAngle(float(k2PI / 3));
+	knob->setWheelInc(0.01f);
+	knob->setHandleLineWidth(2.5f);
+	knob->setInsetValue(6.0f);
 	knob->setMax((1<<16));
 	knob->setDefaultValue(0.5f * (1<<16));
 	_controls[0] = knob;
-	
+
 	// add control
-	frame->addView (knob);
+	frame->addView(knob);
 
 	// synchronize host parameters
-	TFruityPlug *testplug = (TFruityPlug*)effect;
-	setParameter(0, (float)testplug->ProcessParam(0, 0, REC_GetValue));
-	
+	TFruityPlug *plugin = (TFruityPlug*)getEffect();
+	setParameter(0, (float)plugin->ProcessParam(0, 0, REC_GetValue));
+
 	return true;
 }
 
@@ -65,7 +58,7 @@ bool sample_editor::open(void* ptr)
 //----------------
 void sample_editor::close()
 {
-	if( frame )
+	if(frame)
 	{
 		//-- on close we need to delete the frame object.
 		//-- once again we make sure that the member frame variable is set to zero before we delete it
@@ -81,12 +74,12 @@ void sample_editor::close()
 //-----------------------
 void sample_editor::valueChanged(CControl* pControl)
 {
-	TFruityPlug *testplug = (TFruityPlug*)effect;
+	TFruityPlug *plugin = (TFruityPlug*)getEffect();
 
 	int index = pControl->getTag();
-	if( index < NumControls )
+	if(index < NumControls)
 	{
-		testplug->ProcessParam(index, (int)pControl->getValue(), REC_UpdateValue );
+		plugin->ProcessParam(index, (int)pControl->getValue(), REC_UpdateValue);
 	}
 }
 
