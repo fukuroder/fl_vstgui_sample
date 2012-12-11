@@ -1,1 +1,1 @@
-FL plugin sample using VSTGUI
+FL Studio plugin sample using VSTGUI
