@@ -76,11 +76,11 @@ void _stdcall sample::SaveRestoreState(IStream *Stream, BOOL Save)
 		{
 			if( ii == 0 )
 			{
-				_gain = ((float)_params[ii]) / (1<<16);
+				_gain = static_cast<float>(_params[ii]) / (1<<16);
 			}
 
 			// send message to editor
-			_editor->setParameter(ii, (float)_params[ii]);
+			_editor->setParameter(ii, static_cast<float>(_params[ii]));
 		}
 	}
 }
@@ -103,13 +103,13 @@ int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 			if( EditorHandle == 0 )
 			{
 				// open editor
-				_editor->open((HWND)Value);
-				EditorHandle = (HWND)_editor->getFrame()->getPlatformFrame()->getPlatformRepresentation();
+				_editor->open(reinterpret_cast<HWND>(Value));
+				EditorHandle = static_cast<HWND>(_editor->getFrame()->getPlatformFrame()->getPlatformRepresentation());
 			}
 			else
 			{
 				// change parent window ?
-				::SetParent( EditorHandle, (HWND)Value );
+				::SetParent( EditorHandle, reinterpret_cast<HWND>(Value) );
 			}
 		}
 		break;
@@ -145,7 +145,7 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 			char hinttext[256] = { 0 };
 			if( Index == 0 )
 			{
-				_gain = ((float)Value) / (1<<16);
+				_gain = static_cast<float>(Value) / (1<<16);
 				if( _gain < 1.0e-8)
 				{
 					// convert to dB
@@ -164,7 +164,7 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 			if( RECFlags & REC_UpdateControl )
 			{
 				// send message to editor
-				_editor->setParameter(Index, (float)Value);
+				_editor->setParameter(Index, static_cast<float>(Value));
 			}
 			else
 			{

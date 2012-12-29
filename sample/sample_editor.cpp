@@ -34,8 +34,8 @@ bool sample_editor::open(void* ptr)
 	CKnob* knob = new CKnob(r, this, 0, nullptr, nullptr);
 	knob->setColorHandle(CColor(55,55,55,200));
 	knob->setColorShadowHandle(kTransparentCColor);
-	knob->setRangeAngle(float(k2PI * 5 / 6));
-	knob->setStartAngle(float(k2PI / 3));
+	knob->setRangeAngle(static_cast<float>(k2PI * 5 / 6));
+	knob->setStartAngle(static_cast<float>(k2PI / 3));
 	knob->setWheelInc(0.01f);
 	knob->setHandleLineWidth(2.5f);
 	knob->setInsetValue(6.0f);
@@ -47,8 +47,8 @@ bool sample_editor::open(void* ptr)
 	frame->addView(knob);
 
 	// synchronize host parameters
-	TFruityPlug *plugin = (TFruityPlug*)getEffect();
-	setParameter(0, (float)plugin->ProcessParam(0, 0, REC_GetValue));
+	TFruityPlug *plugin = static_cast<TFruityPlug*>(getEffect());
+	setParameter(0, static_cast<float>(plugin->ProcessParam(0, 0, REC_GetValue)));
 
 	return true;
 }
@@ -74,12 +74,12 @@ void sample_editor::close()
 //-----------------------
 void sample_editor::valueChanged(CControl* pControl)
 {
-	TFruityPlug *plugin = (TFruityPlug*)getEffect();
+	TFruityPlug *plugin = static_cast<TFruityPlug*>(getEffect());
 
 	int index = pControl->getTag();
 	if(index < NumControls)
 	{
-		plugin->ProcessParam(index, (int)pControl->getValue(), REC_UpdateValue);
+		plugin->ProcessParam(index, static_cast<int>(pControl->getValue()), REC_UpdateValue);
 	}
 }
 
