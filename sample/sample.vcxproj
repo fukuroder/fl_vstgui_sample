@@ -67,9 +67,7 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy /Y $(TargetPath) "C:\Program Files (x86)\Image-Line\FL Studio 10\Plugins\Fruity\Generators\$(TargetName)\"</Command>
-    </PostBuildEvent>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -96,9 +94,7 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy /Y $(TargetPath) "C:\Program Files (x86)\Image-Line\FL Studio 10\Plugins\Fruity\Generators\$(TargetName)\"</Command>
-    </PostBuildEvent>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\fpsdk\source\c\fp_plugclass.cpp" />
