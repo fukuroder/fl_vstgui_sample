@@ -1,0 +1,6 @@
+ipch/
+Win32/
+*.aps
+*.user
+*.sdf
+*.opensdf
