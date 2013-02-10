@@ -148,7 +148,7 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 				if( _gain < 1.0e-8)
 				{
 					// convert to dB
-					sprintf_s(hinttext, "Gain: -oo dB", 20.0f * log10(_gain));
+					sprintf_s(hinttext, "Gain: -oo dB");
 				}
 				else
 				{
