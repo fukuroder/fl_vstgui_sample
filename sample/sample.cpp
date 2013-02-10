@@ -10,8 +10,7 @@ TFruityPlugInfo PlugInfo =
 	"sample",
 	"sample",
 	FPF_Type_Effect,
-	1, // the amount of parameters
-	0  // infinite
+	1 // the amount of parameters
 };
 
 //----------------
@@ -149,12 +148,12 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 				if( _gain < 1.0e-8)
 				{
 					// convert to dB
-					sprintf_s(hinttext, 256, "Gain: -oo dB", 20.0f * log10(_gain));
+					sprintf_s(hinttext, "Gain: -oo dB", 20.0f * log10(_gain));
 				}
 				else
 				{
 					// convert to dB
-					sprintf_s(hinttext, 256, "Gain: %.3f dB", 20.0f * log10(_gain));
+					sprintf_s(hinttext, "Gain: %.3f dB", 20.0f * log10(_gain));
 				}
 			}
 
