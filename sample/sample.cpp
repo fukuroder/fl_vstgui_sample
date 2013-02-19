@@ -34,12 +34,12 @@ extern "C" TFruityPlug* _stdcall CreatePlugInstance(TFruityPlugHost *Host, int T
 //----------------
 // constructor
 //----------------
-sample::sample(int tag, TFruityPlugHost *host)
+sample::sample(int Tag, TFruityPlugHost *Host)
 {
 	Info = &PlugInfo;
-	HostTag = tag;
+	HostTag = Tag;
 	EditorHandle = 0;
-	_host = host;
+	_host = Host;
 	_editor = new sample_editor(this);
 
 	// parameter initialze
@@ -119,12 +119,12 @@ int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 //----------------
 // 
 //----------------
-void _stdcall sample::GetName(int Section, int Index, int Value, char *label)
+void _stdcall sample::GetName(int Section, int Index, int Value, char *Name)
 {
 	switch (Section)
 	{
 	case FPN_Param:
-		strcpy_s(label, 256, "Gain");
+		strcpy_s(Name, 256, "Gain");
 		break;
 	}
 }

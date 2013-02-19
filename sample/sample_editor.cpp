@@ -10,7 +10,6 @@ sample_editor::sample_editor(TFruityPlug* effect):PluginGUIEditor(effect)
 	rect.top = 0;
 	rect.right = 170;
 	rect.bottom = 50;
-
 	setKnobMode(kLinearMode);
 }
 
@@ -40,7 +39,7 @@ bool sample_editor::open(void* ptr)
 	knob->setHandleLineWidth(2.5f);
 	knob->setInsetValue(6.0f);
 	knob->setMax((1<<16));
-	knob->setDefaultValue(0.5f * (1<<16));
+	knob->setDefaultValue((1<<16));
 	_controls[0] = knob;
 
 	// add control
@@ -60,9 +59,6 @@ void sample_editor::close()
 {
 	if(frame)
 	{
-		//-- on close we need to delete the frame object.
-		//-- once again we make sure that the member frame variable is set to zero before we delete it
-		//-- so that calls to setParameter won't crash.
 		CFrame* oldFrame = frame;
 		frame = nullptr;
 		oldFrame->forget();
@@ -79,7 +75,7 @@ void sample_editor::valueChanged(CControl* pControl)
 	int index = pControl->getTag();
 	if(index < NumControls)
 	{
-		plugin->ProcessParam(index, static_cast<int>(pControl->getValue()), REC_UpdateValue);
+		plugin->ProcessParam(index, static_cast<int>(pControl->getValue() + 0.5), REC_UpdateValue);
 	}
 }
 
