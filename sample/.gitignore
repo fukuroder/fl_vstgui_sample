@@ -1,5 +1,6 @@
 ipch/
 Win32/
+*.suo
 *.aps
 *.user
 *.sdf
