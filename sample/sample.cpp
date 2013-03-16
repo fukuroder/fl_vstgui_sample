@@ -78,8 +78,11 @@ void _stdcall sample::SaveRestoreState(IStream *Stream, BOOL Save)
 				_gain = static_cast<float>(_params[ii]) / (1<<16);
 			}
 
-			// send message to editor
-			_editor->setParameter(ii, static_cast<float>(_params[ii]));
+			if( _editor != nullptr )
+			{
+				// send message to editor
+				_editor->setParameter(ii, static_cast<float>(_params[ii]));
+			}
 		}
 	}
 }
