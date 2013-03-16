@@ -118,11 +118,9 @@ int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 //----------------
 void _stdcall sample::GetName(int Section, int Index, int Value, char *Name)
 {
-	switch (Section)
+	if(Section == FPN_Param)
 	{
-	case FPN_Param:
 		strcpy_s(Name, 256, "Gain");
-		break;
 	}
 }
 
