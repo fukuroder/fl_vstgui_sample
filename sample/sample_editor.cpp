@@ -14,10 +14,21 @@ sample_editor::sample_editor(TFruityPlug* effect):PluginGUIEditor(effect)
 }
 
 //----------------
+// destructor
+//----------------
+sample_editor::~sample_editor()
+{
+	close();
+}
+
+//----------------
 // open
 //----------------
 bool sample_editor::open(void* ptr)
 {
+	// clean
+	close();
+
 	PluginGUIEditor::open(ptr);
 
 	// background
@@ -57,6 +68,8 @@ bool sample_editor::open(void* ptr)
 //----------------
 void sample_editor::close()
 {
+	PluginGUIEditor::close();
+
 	if(frame)
 	{
 		CFrame* oldFrame = frame;
