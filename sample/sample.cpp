@@ -100,13 +100,13 @@ int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 			_editor = new sample_editor(this);
 		}
 
-        if (Value == 0)
-        {
+		if (Value == 0)
+		{
 			// close editor
 			_editor->close();
 			EditorHandle = 0;
-        }
-        else if( EditorHandle == 0 )
+		}
+		else if( EditorHandle == 0 )
 		{
 			// open editor
 			_editor->open(reinterpret_cast<HWND>(Value));
