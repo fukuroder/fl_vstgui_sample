@@ -4,20 +4,24 @@
 
 const int NumControls = 1;    // the amount of controls
 
-class sample_editor : public PluginGUIEditor, public CControlListener
+class TFruityPlug;
+
+class sample_editor : public VSTGUI::VSTGUIEditorInterface, public VSTGUI::IControlListener
 {
 public:
-	sample_editor(TFruityPlug* effect);
+	sample_editor(TFruityPlug* effect, void* ptr);
 	virtual ~sample_editor();
 
-	// from PluginGUIEditor
-	virtual bool open(void* ptr);
-	virtual void close();
-	virtual void setParameter(int32_t index, float value);
+	// from VSTGUIEditorInterface
+	virtual void doIdleStuff();
 
-	// from CControlListener
-	virtual void valueChanged(CControl* pControl);
+	void setParameter(int32_t index, float value);
+	void* getHWND();
+
+	// from IControlListener
+	virtual void valueChanged(VSTGUI::CControl* pControl);
 
 protected:
-	CControl* _controls[NumControls];
+	TFruityPlug* plugin;
+	VSTGUI::CControl* _controls[NumControls];
 };

@@ -1,5 +1,5 @@
-#include "sample.h"
 #include "sample_editor.h"
+#include "sample.h"
 
 //---------------------
 // Plug-in information
@@ -90,27 +90,27 @@ void _stdcall sample::SaveRestoreState(IStream *Stream, BOOL Save)
 //----------------
 // 
 //----------------
-int _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
+intptr_t _stdcall sample::Dispatcher(intptr_t ID, intptr_t Index, intptr_t Value)
 {
 	if( ID == FPD_ShowEditor )
 	{
-		if( _editor == nullptr)
-		{
-			// first
-			_editor = new sample_editor(this);
-		}
-
 		if (Value == 0)
 		{
 			// close editor
-			_editor->close();
+			delete _editor;
+			_editor = nullptr;
 			EditorHandle = 0;
 		}
 		else if( EditorHandle == 0 )
 		{
+			if (_editor == nullptr)
+			{
+				// first
+				_editor = new sample_editor(this, reinterpret_cast<HWND>(Value));
+			}
+
 			// open editor
-			_editor->open(reinterpret_cast<HWND>(Value));
-			EditorHandle = static_cast<HWND>(_editor->getFrame()->getPlatformFrame()->getPlatformRepresentation());
+			EditorHandle = reinterpret_cast<HWND>(_editor->getHWND());
 		}
 		else
 		{
@@ -130,6 +130,11 @@ void _stdcall sample::GetName(int Section, int Index, int Value, char *Name)
 	{
 		strcpy_s(Name, 256, "Gain");
 	}
+}
+
+int _stdcall sample::ProcessEvent(int EventID, int EventValue, int Flags)
+{
+	return 0;
 }
 
 //----------------
@@ -156,7 +161,7 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 				else
 				{
 					// convert to dB
-					sprintf_s(hinttext, "Gain: %.3f dB", 20.0f * log10(_gain));
+					sprintf_s(hinttext, "Gain: %.3f dB", 20.0 * log10(_gain));
 				}
 			}
 
@@ -186,9 +191,9 @@ int _stdcall sample::ProcessParam(int Index, int Value, int RECFlags)
 //----------------
 // idle
 //----------------
-void _stdcall sample::Idle()
+void _stdcall sample::Idle_Public()
 {
-	if(_editor) _editor->idle();
+	if (_editor) _editor->doIdleStuff();
 }
 
 //----------------
@@ -202,4 +207,56 @@ void _stdcall sample::Eff_Render(PWAV32FS SourceBuffer, PWAV32FS DestBuffer, int
 		(*DestBuffer)[ii][0] = (*SourceBuffer)[ii][0] * gain;
 		(*DestBuffer)[ii][1] = (*SourceBuffer)[ii][1] * gain;
 	}
+}
+
+void _stdcall sample::Gen_Render(PWAV32FS DestBuffer, int& Length)
+{
+}
+
+TVoiceHandle _stdcall sample::TriggerVoice(PVoiceParams VoiceParams, intptr_t SetTag)
+{
+	return TVoiceHandle();
+}
+
+void _stdcall sample::Voice_Release(TVoiceHandle Handle)
+{
+}
+
+void _stdcall sample::Voice_Kill(TVoiceHandle Handle)
+{
+}
+
+int _stdcall sample::Voice_ProcessEvent(TVoiceHandle Handle, int EventID, int EventValue, int Flags)
+{
+	return 0;
+}
+
+int _stdcall sample::Voice_Render(TVoiceHandle Handle, PWAV32FS DestBuffer, int& Length)
+{
+	return 0;
+}
+
+void _stdcall sample::NewTick()
+{
+}
+
+void _stdcall sample::MIDITick()
+{
+}
+
+void _stdcall sample::MIDIIn(int& Msg)
+{
+}
+
+void _stdcall sample::MsgIn(intptr_t Msg)
+{
+}
+
+int _stdcall sample::OutputVoice_ProcessEvent(TOutVoiceHandle Handle, int EventID, int EventValue, int Flags)
+{
+	return 0;
+}
+
+void _stdcall sample::OutputVoice_Kill(TVoiceHandle Handle)
+{
 }

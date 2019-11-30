@@ -25,10 +25,7 @@
     <ClCompile Include="..\fpsdk\source\c\fp_plugclass.cpp">
       <Filter>Source Files\fpsdk</Filter>
     </ClCompile>
-    <ClCompile Include="..\vstgui\plugin-bindings\plugguieditor.cpp">
-      <Filter>Source Files\vstgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\vstgui\vstgui_win32.cpp">
+    <ClCompile Include="..\vstgui\vstgui\vstgui_win32.cpp">
       <Filter>Source Files\vstgui</Filter>
     </ClCompile>
   </ItemGroup>
