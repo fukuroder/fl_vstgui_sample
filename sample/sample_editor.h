@@ -15,11 +15,14 @@ public:
 	// from VSTGUIEditorInterface
 	virtual void doIdleStuff();
 
-	void setParameter(int32_t index, float value);
-	void* getHWND();
-
 	// from IControlListener
 	virtual void valueChanged(VSTGUI::CControl* pControl);
+
+	//
+	void setParameter(int32_t index, float value);
+
+	//
+	void* getHWND();
 
 protected:
 	TFruityPlug* plugin;

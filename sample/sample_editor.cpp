@@ -8,10 +8,10 @@
 sample_editor::sample_editor(TFruityPlug* effect, void* ptr)
 	:plugin(effect), _controls{ nullptr }
 {
-	// backgroundS
+	// background
 	VSTGUI::CRect frameSize(0, 0, 170, 50);
 	this->frame = new VSTGUI::CFrame(frameSize, this);
-	this->frame->open(ptr);
+	this->frame->open(ptr, VSTGUI::PlatformType::kHWND);
 
 	VSTGUI::CBitmap* background = new VSTGUI::CBitmap("background.png");
 	this->frame->setBackground(background);
