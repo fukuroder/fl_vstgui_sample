@@ -1,6 +1,7 @@
 #pragma once
 
 #include "plugin-bindings/plugguieditor.h"
+#include "lib/platform/platformfactory.h"
 
 const int NumControls = 1;    // the amount of controls
 

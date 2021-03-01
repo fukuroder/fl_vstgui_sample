@@ -16,10 +16,9 @@ TFruityPlugInfo PlugInfo =
 //----------------
 // DLL entry
 //----------------
-void* hInstance; // used by VSTGUI
 extern "C" BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpvReserved)
 {
-	hInstance = hInst;
+	VSTGUI::initPlatform(hInst);
 	return TRUE;
 }
 
